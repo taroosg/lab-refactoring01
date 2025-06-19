@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>学生成績処理システム（リファクタリング後）</title>
+  </head>
+  <body>
+    <h1>学生成績処理システム（リファクタリング後）</h1>
+    <p>
+      ブラウザの開発者ツール（F12）でコンソールを開いて結果を確認してください。
+    </p>
+
+    <script>
+      // 学生データ
+      const studentData = [
+        { name: "空条承太郎", math: 92, english: 88, science: 85 },
+        { name: "吉良吉影", math: 85, english: 78, science: 92 },
+        { name: "東方仗助", math: 65, english: 72, science: 68 },
+        { name: "広瀬康一", math: 78, english: 95, science: 82 },
+        { name: "岸辺露伴", math: 88, english: 76, science: 90 },
+        { name: "虹村億泰", math: 58, english: 64, science: 62 },
+      ];
+
+      // ========== 基本処理関数群 ==========
+
+      /**
+       * 3科目の平均点を計算する
+       * @param {number} math - 数学の点数
+       * @param {number} english - 英語の点数
+       * @param {number} science - 理科の点数
+       * @returns {number} 平均点（小数点第1位まで）
+       */
+      function calculateAverage(math, english, science) {
+        // TODO: 演習で実装
+        return 0;
+      }
+
+      /**
+       * 平均点から合否とグレードを判定する
+       * @param {number} average - 平均点
+       * @returns {Object} {status: string, grade: string} 合否状況とグレード
+       */
+      function determineGradeAndStatus(average) {
+        // TODO: 演習で実装
+        return { status: "", grade: "" };
+      }
+
+      /**
+       * 各科目の点数から特記事項を判定する
+       * @param {number} math - 数学の点数
+       * @param {number} english - 英語の点数
+       * @param {number} science - 理科の点数
+       * @returns {string} 特記事項
+       */
+      function checkSpecialNotes(math, english, science) {
+        // TODO: 演習で実装
+        return "";
+      }
+
+      /**
+       * 1人の学生の成績を処理する
+       * @param {Object} student - 学生データ {name, math, english, science}
+       * @returns {Object} 処理済み学生データ
+       */
+      function processStudentData(student) {
+        // TODO: 演習で実装
+        return {};
+      }
+
+      // ========== 統計処理関数群 ==========
+
+      /**
+       * 基本統計情報を計算する（合格者数、合格率、科目別平均）
+       * @param {Array} results - 処理済み学生データの配列
+       * @param {Array} originalData - 元の学生データ配列
+       * @returns {Object} 基本統計情報
+       */
+      function calculateBasicStatistics(results, originalData) {
+        // TODO: 演習で実装
+        return {
+          passCount: 0,
+          passRate: 0,
+          mathAvg: 0,
+          englishAvg: 0,
+          scienceAvg: 0,
+        };
+      }
+
+      /**
+       * 最高得点者と最低得点者を特定する
+       * @param {Array} results - 処理済み学生データの配列
+       * @returns {Object} {highest: Object, lowest: Object}
+       */
+      function findTopAndBottomStudents(results) {
+        // TODO: 演習で実装
+        return { highest: {}, lowest: {} };
+      }
+
+      /**
+       * 各科目の詳細統計を計算する
+       * @param {Array} originalData - 元の学生データ配列
+       * @returns {Object} 科目別統計情報
+       */
+      function calculateSubjectStatistics(originalData) {
+        // TODO: 演習で実装
+        return {
+          math: {
+            max: 0,
+            min: 0,
+            maxStudent: "",
+            minStudent: "",
+            passCount: 0,
+          },
+          english: {
+            max: 0,
+            min: 0,
+            maxStudent: "",
+            minStudent: "",
+            passCount: 0,
+          },
+          science: {
+            max: 0,
+            min: 0,
+            maxStudent: "",
+            minStudent: "",
+            passCount: 0,
+          },
+        };
+      }
+
+      /**
+       * 学生を特別カテゴリに分類する
+       * @param {Array} results - 処理済み学生データの配列
+       * @param {Array} originalData - 元の学生データ配列
+       * @returns {Object} 各カテゴリの学生リスト
+       */
+      function categorizeStudents(results, originalData) {
+        // TODO: 演習で実装
+        return {
+          excellent: [],
+          needSupport: [],
+          perfect: [],
+        };
+      }
+
+      /**
+       * 学生を平均点で順位付けする
+       * @param {Array} results - 処理済み学生データの配列
+       * @returns {Array} 順位付けされた学生データの配列
+       */
+      function rankStudents(results) {
+        // TODO: 演習で実装
+        return [];
+      }
+
+      /**
+       * 改善提案を生成する
+       * @param {Object} basicStats - 基本統計情報
+       * @param {Array} results - 処理済み学生データの配列
+       * @returns {Object} 改善提案情報
+       */
+      function generateRecommendations(basicStats, results) {
+        // TODO: 演習で実装
+        return {
+          weakestSubject: "",
+          classStatus: "",
+          guidanceGroups: {
+            advanced: 0,
+            standard: 0,
+            support: 0,
+          },
+        };
+      }
+
+      // ========== 表示処理関数群 ==========
+
+      /**
+       * 個別成績結果を表示する
+       * @param {Array} results - 処理済み学生データの配列
+       */
+      function displayIndividualResults(results) {
+        // TODO: 演習で実装
+        console.log("--- 個別成績結果 ---");
+      }
+
+      /**
+       * 基本統計情報を表示する
+       * @param {Object} basicStats - 基本統計情報
+       */
+      function displayBasicStatistics(basicStats) {
+        // TODO: 演習で実装
+        console.log("--- 統計情報 ---");
+      }
+
+      /**
+       * 科目別詳細統計を表示する
+       * @param {Object} subjectStats - 科目別統計情報
+       * @param {Object} basicStats - 基本統計情報（平均点用）
+       */
+      function displaySubjectStatistics(subjectStats, basicStats) {
+        // TODO: 演習で実装
+        console.log("--- 科目別詳細統計 ---");
+      }
+
+      /**
+       * 特別対象者情報を表示する
+       * @param {Object} categories - 分類された学生情報
+       */
+      function displaySpecialCategories(categories) {
+        // TODO: 演習で実装
+        console.log("--- 特別対象者集計 ---");
+      }
+
+      /**
+       * 成績順位を表示する
+       * @param {Array} rankedStudents - 順位付けされた学生データ
+       */
+      function displayRankings(rankedStudents) {
+        // TODO: 演習で実装
+        console.log("--- 成績順位 ---");
+      }
+
+      /**
+       * 改善提案を表示する
+       * @param {Object} recommendations - 改善提案情報
+       */
+      function displayRecommendations(recommendations) {
+        // TODO: 演習で実装
+        console.log("--- 改善提案 ---");
+      }
+
+      // ========== メイン処理 ==========
+
+      /**
+       * 学生成績処理システムのメイン処理
+       */
+      function processStudentGradesRefactored() {
+        console.log("=== 学生成績処理システム開始 ===");
+
+        // 1. 各学生のデータを処理
+        const results = [];
+        for (let i = 0; i < studentData.length; i++) {
+          const processedStudent = processStudentData(studentData[i]);
+          results.push(processedStudent);
+        }
+
+        // 2. 統計情報を計算
+        const basicStats = calculateBasicStatistics(results, studentData);
+        const topBottom = findTopAndBottomStudents(results);
+        const subjectStats = calculateSubjectStatistics(studentData);
+        const categories = categorizeStudents(results, studentData);
+        const rankedStudents = rankStudents(results);
+        const recommendations = generateRecommendations(basicStats, results);
+
+        // 3. 結果を表示
+        displayIndividualResults(results);
+        displayBasicStatistics(basicStats);
+
+        // 最高・最低得点者表示（basicStatsに含める方法もあるが、ここでは個別表示）
+        console.log(
+          `最高得点: ${topBottom.highest.name} (平均${topBottom.highest.average}点)`,
+        );
+        console.log(
+          `最低得点: ${topBottom.lowest.name} (平均${topBottom.lowest.average}点)`,
+        );
+
+        displaySubjectStatistics(subjectStats, basicStats);
+        displaySpecialCategories(categories);
+        displayRankings(rankedStudents);
+        displayRecommendations(recommendations);
+
+        console.log("\n=== 処理完了 ===");
+      }
+
+      // ========== 実行 ==========
+
+      // リファクタリング後の処理を実行
+      processStudentGradesRefactored();
+    </script>
+  </body>
+</html>

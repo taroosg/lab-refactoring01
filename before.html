@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>学生成績処理システム</title>
+  </head>
+  <body>
+    <h1>学生成績処理システム</h1>
+    <p>
+      ブラウザの開発者ツール（F12）でコンソールを開いて結果を確認してください。
+    </p>
+
+    <script>
+      // 学生データ（実際のシステムではファイルやデータベースから読み込む想定）
+      const studentData = [
+        { name: "空条承太郎", math: 92, english: 88, science: 85 },
+        { name: "吉良吉影", math: 85, english: 78, science: 92 },
+        { name: "東方仗助", math: 65, english: 72, science: 68 },
+        { name: "広瀬康一", math: 78, english: 95, science: 82 },
+        { name: "岸辺露伴", math: 88, english: 76, science: 90 },
+        { name: "虹村億泰", math: 58, english: 64, science: 62 },
+      ];
+
+      // 全ての処理を1つの関数で実行（リファクタリング前）
+      function processStudentGrades() {
+        console.log("=== 学生成績処理システム開始 ===");
+
+        // 各学生の成績を処理
+        const results = [];
+        for (let i = 0; i < studentData.length; i++) {
+          const student = studentData[i];
+
+          // 平均点を計算
+          const total = student.math + student.english + student.science;
+          const average = Math.round((total / 3) * 10) / 10; // 小数点第1位まで
+
+          // 合否判定（平均70点以上で合格）
+          let status = "";
+          let grade = "";
+          if (average >= 90) {
+            status = "合格";
+            grade = "A";
+          } else if (average >= 80) {
+            status = "合格";
+            grade = "B";
+          } else if (average >= 70) {
+            status = "合格";
+            grade = "C";
+          } else {
+            status = "不合格";
+            grade = "D";
+          }
+
+          // 特記事項の判定
+          let note = "";
+          if (
+            student.math >= 95 ||
+            student.english >= 95 ||
+            student.science >= 95
+          ) {
+            note = "優秀科目あり";
+          } else if (
+            student.math < 60 ||
+            student.english < 60 ||
+            student.science < 60
+          ) {
+            note = "要補習科目あり";
+          }
+
+          // 結果をまとめる
+          const result = {
+            name: student.name,
+            math: student.math,
+            english: student.english,
+            science: student.science,
+            total: total,
+            average: average,
+            status: status,
+            grade: grade,
+            note: note,
+          };
+
+          results.push(result);
+        }
+
+        // 結果を表示
+        console.log("\n--- 個別成績結果 ---");
+        for (let i = 0; i < results.length; i++) {
+          const r = results[i];
+          console.log(
+            `${r.name}: 数学${r.math} 英語${r.english} 理科${r.science} | 合計${r.total} 平均${r.average} ${r.status}(${r.grade}) ${r.note}`,
+          );
+        }
+
+        // 統計情報を計算・表示
+        console.log("\n--- 統計情報 ---");
+
+        // 合格者数と合格率
+        let passCount = 0;
+        for (let i = 0; i < results.length; i++) {
+          if (results[i].status === "合格") {
+            passCount++;
+          }
+        }
+        const passRate = Math.round((passCount / results.length) * 100);
+        console.log(
+          `合格者数: ${passCount}名 / ${results.length}名 (合格率: ${passRate}%)`,
+        );
+
+        // 各科目の平均点
+        let mathTotal = 0,
+          englishTotal = 0,
+          scienceTotal = 0;
+        for (let i = 0; i < studentData.length; i++) {
+          mathTotal += studentData[i].math;
+          englishTotal += studentData[i].english;
+          scienceTotal += studentData[i].science;
+        }
+        const mathAvg = Math.round((mathTotal / studentData.length) * 10) / 10;
+        const englishAvg =
+          Math.round((englishTotal / studentData.length) * 10) / 10;
+        const scienceAvg =
+          Math.round((scienceTotal / studentData.length) * 10) / 10;
+
+        console.log(
+          `科目別平均点: 数学${mathAvg} 英語${englishAvg} 理科${scienceAvg}`,
+        );
+
+        // 最高得点者と最低得点者
+        let highest = results[0];
+        let lowest = results[0];
+        for (let i = 1; i < results.length; i++) {
+          if (results[i].average > highest.average) {
+            highest = results[i];
+          }
+          if (results[i].average < lowest.average) {
+            lowest = results[i];
+          }
+        }
+
+        console.log(`最高得点: ${highest.name} (平均${highest.average}点)`);
+        console.log(`最低得点: ${lowest.name} (平均${lowest.average}点)`);
+
+        // 成績分布
+        let gradeA = 0,
+          gradeB = 0,
+          gradeC = 0,
+          gradeD = 0;
+        for (let i = 0; i < results.length; i++) {
+          switch (results[i].grade) {
+            case "A":
+              gradeA++;
+              break;
+            case "B":
+              gradeB++;
+              break;
+            case "C":
+              gradeC++;
+              break;
+            case "D":
+              gradeD++;
+              break;
+          }
+        }
+
+        console.log(
+          `成績分布: A評価${gradeA}名 B評価${gradeB}名 C評価${gradeC}名 D評価${gradeD}名`,
+        );
+
+        // 各科目の最高点・最低点
+        console.log("\n--- 科目別詳細統計 ---");
+        let mathScores = [],
+          englishScores = [],
+          scienceScores = [];
+        for (let i = 0; i < studentData.length; i++) {
+          mathScores.push(studentData[i].math);
+          englishScores.push(studentData[i].english);
+          scienceScores.push(studentData[i].science);
+        }
+
+        // 数学の統計
+        let mathMax = Math.max(...mathScores);
+        let mathMin = Math.min(...mathScores);
+        let mathMaxStudent = "",
+          mathMinStudent = "";
+        for (let i = 0; i < studentData.length; i++) {
+          if (studentData[i].math === mathMax)
+            mathMaxStudent = studentData[i].name;
+          if (studentData[i].math === mathMin)
+            mathMinStudent = studentData[i].name;
+        }
+        console.log(
+          `数学: 最高${mathMax}点(${mathMaxStudent}) 最低${mathMin}点(${mathMinStudent}) 平均${mathAvg}点`,
+        );
+
+        // 英語の統計
+        let englishMax = Math.max(...englishScores);
+        let englishMin = Math.min(...englishScores);
+        let englishMaxStudent = "",
+          englishMinStudent = "";
+        for (let i = 0; i < studentData.length; i++) {
+          if (studentData[i].english === englishMax)
+            englishMaxStudent = studentData[i].name;
+          if (studentData[i].english === englishMin)
+            englishMinStudent = studentData[i].name;
+        }
+        console.log(
+          `英語: 最高${englishMax}点(${englishMaxStudent}) 最低${englishMin}点(${englishMinStudent}) 平均${englishAvg}点`,
+        );
+
+        // 理科の統計
+        let scienceMax = Math.max(...scienceScores);
+        let scienceMin = Math.min(...scienceScores);
+        let scienceMaxStudent = "",
+          scienceMinStudent = "";
+        for (let i = 0; i < studentData.length; i++) {
+          if (studentData[i].science === scienceMax)
+            scienceMaxStudent = studentData[i].name;
+          if (studentData[i].science === scienceMin)
+            scienceMinStudent = studentData[i].name;
+        }
+        console.log(
+          `理科: 最高${scienceMax}点(${scienceMaxStudent}) 最低${scienceMin}点(${scienceMinStudent}) 平均${scienceAvg}点`,
+        );
+
+        // 科目別合格者数（60点以上）
+        console.log("\n--- 科目別合格状況(60点以上) ---");
+        let mathPassCount = 0,
+          englishPassCount = 0,
+          sciencePassCount = 0;
+        for (let i = 0; i < studentData.length; i++) {
+          if (studentData[i].math >= 60) mathPassCount++;
+          if (studentData[i].english >= 60) englishPassCount++;
+          if (studentData[i].science >= 60) sciencePassCount++;
+        }
+        console.log(
+          `数学合格者: ${mathPassCount}名/${studentData.length}名 (${Math.round(
+            (mathPassCount / studentData.length) * 100,
+          )}%)`,
+        );
+        console.log(
+          `英語合格者: ${englishPassCount}名/${
+            studentData.length
+          }名 (${Math.round((englishPassCount / studentData.length) * 100)}%)`,
+        );
+        console.log(
+          `理科合格者: ${sciencePassCount}名/${
+            studentData.length
+          }名 (${Math.round((sciencePassCount / studentData.length) * 100)}%)`,
+        );
+
+        // 優秀者・要注意者の集計
+        console.log("\n--- 特別対象者集計 ---");
+        let excellentStudents = [];
+        let needSupportStudents = [];
+        let perfectStudents = []; // 全科目90点以上
+
+        for (let i = 0; i < results.length; i++) {
+          const student = results[i];
+          const original = studentData[i];
+
+          // 優秀者判定（いずれかの科目で95点以上）
+          if (
+            original.math >= 95 ||
+            original.english >= 95 ||
+            original.science >= 95
+          ) {
+            let excellentSubjects = [];
+            if (original.math >= 95)
+              excellentSubjects.push(`数学${original.math}点`);
+            if (original.english >= 95)
+              excellentSubjects.push(`英語${original.english}点`);
+            if (original.science >= 95)
+              excellentSubjects.push(`理科${original.science}点`);
+            excellentStudents.push(
+              `${student.name}(${excellentSubjects.join("、")})`,
+            );
+          }
+
+          // 要支援者判定（いずれかの科目で60点未満）
+          if (
+            original.math < 60 ||
+            original.english < 60 ||
+            original.science < 60
+          ) {
+            let weakSubjects = [];
+            if (original.math < 60) weakSubjects.push(`数学${original.math}点`);
+            if (original.english < 60)
+              weakSubjects.push(`英語${original.english}点`);
+            if (original.science < 60)
+              weakSubjects.push(`理科${original.science}点`);
+            needSupportStudents.push(
+              `${student.name}(${weakSubjects.join("、")})`,
+            );
+          }
+
+          // 完璧者判定（全科目90点以上）
+          if (
+            original.math >= 90 &&
+            original.english >= 90 &&
+            original.science >= 90
+          ) {
+            perfectStudents.push(
+              `${student.name}(数学${original.math} 英語${original.english} 理科${original.science})`,
+            );
+          }
+        }
+
+        console.log(`優秀者(95点以上科目あり): ${excellentStudents.length}名`);
+        if (excellentStudents.length > 0) {
+          for (let i = 0; i < excellentStudents.length; i++) {
+            console.log(`  - ${excellentStudents[i]}`);
+          }
+        }
+
+        console.log(
+          `要支援者(60点未満科目あり): ${needSupportStudents.length}名`,
+        );
+        if (needSupportStudents.length > 0) {
+          for (let i = 0; i < needSupportStudents.length; i++) {
+            console.log(`  - ${needSupportStudents[i]}`);
+          }
+        }
+
+        console.log(`完璧者(全科目90点以上): ${perfectStudents.length}名`);
+        if (perfectStudents.length > 0) {
+          for (let i = 0; i < perfectStudents.length; i++) {
+            console.log(`  - ${perfectStudents[i]}`);
+          }
+        }
+
+        // 平均点による順位付け
+        console.log("\n--- 成績順位 ---");
+        // 平均点でソート（降順）
+        const sortedResults = [];
+        for (let i = 0; i < results.length; i++) {
+          sortedResults.push(results[i]);
+        }
+        // バブルソート実装（理解しやすさのため）
+        for (let i = 0; i < sortedResults.length - 1; i++) {
+          for (let j = 0; j < sortedResults.length - 1 - i; j++) {
+            if (sortedResults[j].average < sortedResults[j + 1].average) {
+              let temp = sortedResults[j];
+              sortedResults[j] = sortedResults[j + 1];
+              sortedResults[j + 1] = temp;
+            }
+          }
+        }
+
+        for (let i = 0; i < sortedResults.length; i++) {
+          const rank = i + 1;
+          const student = sortedResults[i];
+          console.log(
+            `${rank}位: ${student.name} 平均${student.average}点 (${student.grade}評価)`,
+          );
+        }
+
+        // 改善提案の生成
+        console.log("\n--- 改善提案 ---");
+
+        // 最も改善が必要な科目
+        let subjectAverages = [
+          { subject: "数学", average: mathAvg },
+          { subject: "英語", average: englishAvg },
+          { subject: "理科", average: scienceAvg },
+        ];
+        let lowestSubject = subjectAverages[0];
+        for (let i = 1; i < subjectAverages.length; i++) {
+          if (subjectAverages[i].average < lowestSubject.average) {
+            lowestSubject = subjectAverages[i];
+          }
+        }
+        console.log(
+          `最も改善が必要な科目: ${lowestSubject.subject} (平均${lowestSubject.average}点)`,
+        );
+
+        // クラス全体の傾向分析
+        if (passRate >= 80) {
+          console.log("クラス全体の状況: 良好（合格率80%以上）");
+        } else if (passRate >= 60) {
+          console.log(
+            "クラス全体の状況: 普通（合格率60-79%）- さらなる向上が期待される",
+          );
+        } else {
+          console.log(
+            "クラス全体の状況: 要改善（合格率60%未満）- 集中的な指導が必要",
+          );
+        }
+
+        // 個別指導提案
+        console.log("\n個別指導提案:");
+        let highAchieverCount = 0;
+        let averageAchieverCount = 0;
+        let lowAchieverCount = 0;
+
+        for (let i = 0; i < results.length; i++) {
+          if (results[i].average >= 85) {
+            highAchieverCount++;
+          } else if (results[i].average >= 70) {
+            averageAchieverCount++;
+          } else {
+            lowAchieverCount++;
+          }
+        }
+
+        console.log(`- 発展学習対象者: ${highAchieverCount}名 (平均85点以上)`);
+        console.log(
+          `- 標準指導対象者: ${averageAchieverCount}名 (平均70-84点)`,
+        );
+        console.log(`- 個別支援対象者: ${lowAchieverCount}名 (平均70点未満)`);
+
+        console.log("\n=== 処理完了 ===");
+      }
+
+      // 処理を実行
+      processStudentGrades();
+    </script>
+  </body>
+</html>
